@@ -1,4 +1,4 @@
-package com.example.demo.modal;
+package com.example.demo.model;
 
 public class User {
     
