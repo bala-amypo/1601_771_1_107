@@ -1,74 +1,74 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(
+        name = "parcel",
+        uniqueConstraints = @UniqueConstraint(columnNames = "trackingNumber")
+)
 public class Parcel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String trackingNumber;
+
+    @Column(nullable = false)
     private String senderName;
+
+    @Column(nullable = false)
     private String receiverName;
-    private LocalDateTime deliveredAt;
+
+    @Column(nullable = false)
     private Double weightKg;
 
-public Parcel(){
+    private LocalDateTime deliveredAt;
 
-}
+    public Long getId() {
+        return id;
+    }
 
-public Parcel(String trackingNumber, String senderName, String receiverName, LocalDateTime deliveredAt,
-        Double weightKg) {
-    this.trackingNumber = trackingNumber;
-    this.senderName = senderName;
-    this.receiverName = receiverName;
-    this.deliveredAt = deliveredAt;
-    this.weightKg = weightKg;
-}
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
 
-public void setId(Long id) {
-    this.id = id;
-}
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
 
-public void setTrackingNumber(String trackingNumber) {
-    this.trackingNumber = trackingNumber;
-}
+    public String getSenderName() {
+        return senderName;
+    }
 
-public void setSenderName(String senderName) {
-    this.senderName = senderName;
-}
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
 
-public void setReceiverName(String receiverName) {
-    this.receiverName = receiverName;
-}
+    public String getReceiverName() {
+        return receiverName;
+    }
 
-public void setDeliveredAt(LocalDateTime deliveredAt) {
-    this.deliveredAt = deliveredAt;
-}
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
 
-public void setWeightKg(Double weightKg) {
-    this.weightKg = weightKg;
-}
+    public Double getWeightKg() {
+        return weightKg;
+    }
 
-public Long getId() {
-    return id;
-}
+    public void setWeightKg(Double weightKg) {
+        this.weightKg = weightKg;
+    }
 
-public String getTrackingNumber() {
-    return trackingNumber;
-}
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
 
-public String getSenderName() {
-    return senderName;
-}
-
-public String getReceiverName() {
-    return receiverName;
-}
-
-public LocalDateTime getDeliveredAt() {
-    return deliveredAt;
-}
-
-public Double getWeightKg() {
-    return weightKg;
-}
-
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
+    }
 }
