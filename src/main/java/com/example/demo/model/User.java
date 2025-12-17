@@ -1,16 +1,21 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class User {
-    
+    @Id @GeneratedValue
     private Long id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
-    private String role;
+    private String role = "AGENT";
 
-    public User(){
-
-    }
+    public User(){}
 
     public User(String name, String email, String password, String role) {
         this.name = name;
@@ -58,4 +63,5 @@ public class User {
     public String getRole() {
         return role;
     }
+    
 }
