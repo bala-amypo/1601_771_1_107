@@ -1,0 +1,83 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "parcels", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "trackingNumber")
+})
+public class Parcel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String trackingNumber;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String senderName;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String receiverName;
+
+    @NotNull
+    @Positive
+    @Column(nullable = false)
+    private Double weightKg;
+
+    private LocalDateTime deliveredAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public Double getWeightKg() {
+        return weightKg;
+    }
+
+    public void setWeightKg(Double weightKg) {
+        this.weightKg = weightKg;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
+    }
+}
