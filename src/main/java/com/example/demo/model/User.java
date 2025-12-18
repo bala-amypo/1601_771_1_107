@@ -3,8 +3,11 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -13,15 +16,16 @@ public class User {
     private String email;
 
     private String password;
+
     private String role = "AGENT";
 
-    public User(){}
+    public User() {}
 
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        if (role != null) this.role = role;
     }
 
     public void setId(Long id) {
