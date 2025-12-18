@@ -1,18 +1,26 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.ClaimRule;
+import com.example.demo.model.ClaimRule;
 import java.util.List;
 
-public final class RuleEngineUtil {
-    private RuleEngineUtil() {
-        throw new UnsupportedOperationException("Utility class");
-    }
+public class RuleEngineUtil {
 
     public static double computeScore(String description, List<ClaimRule> rules) {
-        double score = 0;
+        if (description == null || rules == null || rules.isEmpty())
+            return 0.0;
+
+        double score = 0.0;
+
         for (ClaimRule rule : rules) {
-            if (description.contains(rule.getConditionExpression())) {
+            String expr = rule.getConditionExpression();
+
+            if ("always".equalsIgnoreCase(expr)) {
                 score += rule.getWeight();
+            } else if (expr.startsWith("description_contains:")) {
+                String keyword = expr.split(":")[1];
+                if (description.toLowerCase().contains(keyword.toLowerCase())) {
+                    score += rule.getWeight();
+                }
             }
         }
         return score;
