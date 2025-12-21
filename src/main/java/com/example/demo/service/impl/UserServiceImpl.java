@@ -1,27 +1,29 @@
 package com.example.demo.service.impl;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User register(User user) {
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Email already registered");
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email already exists");
         }
-        user.setPassword(hashPassword(user.getPassword()));
+        user.setPassword(encoder.encode(user.getPassword()));
         if (user.getRole() == null) {
             user.setRole("AGENT");
         }
@@ -31,11 +33,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-    }
-
-    private String hashPassword(String plainPassword) {
-        return org.springframework.security.crypto.bcrypt.BCrypt
-                .hashpw(plainPassword, org.springframework.security.crypto.bcrypt.BCrypt.gensalt());
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 }
