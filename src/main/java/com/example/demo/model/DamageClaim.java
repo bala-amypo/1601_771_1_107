@@ -24,24 +24,62 @@ public class DamageClaim {
 
     public DamageClaim() {}
 
-    // Getters and setters
-    public Long getId() { return id; }
+    // ===== Getters & Setters =====
 
-    public String getClaimNumber() { return claimNumber; }
-    public void setClaimNumber(String claimNumber) { this.claimNumber = claimNumber; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getClaimDescription() { return claimDescription; }  // fix typo
-    public void setClaimDescription(String claimDescription) { this.claimDescription = claimDescription; }
+    // 🔥 REQUIRED BY TEST
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getClaimNumber() {
+        return claimNumber;
+    }
 
-    public Double getScore() { return score; }
-    public void setScore(Double score) { this.score = score; }  // fix type to Double
+    public void setClaimNumber(String claimNumber) {
+        this.claimNumber = claimNumber;
+    }
 
-    public Parcel getParcel() { return parcel; }
-    public void setParcel(Parcel parcel) { this.parcel = parcel; }  // fix missing method
+    public String getClaimDescription() {
+        return claimDescription;
+    }
 
-    public Set<ClaimRule> getAppliedRules() { return appliedRules; }
-    public void setAppliedRules(Set<ClaimRule> appliedRules) { this.appliedRules = appliedRules; }
+    public void setClaimDescription(String claimDescription) {
+        this.claimDescription = claimDescription;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public Parcel getParcel() {
+        return parcel;
+    }
+
+    public void setParcel(Parcel parcel) {
+        this.parcel = parcel;
+    }
+
+    public Set<ClaimRule> getAppliedRules() {
+        return appliedRules;
+    }
+
+    public void setAppliedRules(Set<ClaimRule> appliedRules) {
+        this.appliedRules = appliedRules;
+    }
 }
