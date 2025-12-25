@@ -36,11 +36,11 @@ public class AuthController {
 
         User user = userService.findByEmail(request.getEmail());
 
+        // ✅ BCrypt match
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // ✅ generate token with correct signature
         String token = jwtUtil.generateToken(
                 user.getId(),
                 user.getEmail(),
