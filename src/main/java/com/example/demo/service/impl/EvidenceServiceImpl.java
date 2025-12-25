@@ -28,9 +28,10 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     @Override
-    public Evidence getById(Long id) {
-        return evidenceRepository.findById(id).orElse(null);
-    }
+public Evidence getById(Long id) {
+    return evidenceRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Evidence not found"));
+}
 
     @Override
     public List<Evidence> getAllEvidence() {
