@@ -1,12 +1,8 @@
 package com.example.demo.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "claim_rules")
 public class ClaimRule {
 
     @Id
@@ -14,38 +10,40 @@ public class ClaimRule {
     private Long id;
 
     private String ruleName;
-
-    private String conditionExpression;
-
+    private String expression;
     private Double weight;
 
-    @ManyToMany(mappedBy = "appliedRules")
-    private Set<DamageClaim> claims = new HashSet<>();
+    public ClaimRule() {}
 
-    public ClaimRule() {
-    }
-
-    public ClaimRule(String ruleName, String conditionExpression, Double weight) {
+    public ClaimRule(String ruleName, String expression, Double weight) {
         this.ruleName = ruleName;
-        this.conditionExpression = conditionExpression;
+        this.expression = expression;
         this.weight = weight;
     }
 
-    // getters and setters
+    // ===== Getters & Setters =====
 
-    public Long getId() { return id; }
-
-    public String getRuleName() { return ruleName; }
-
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-
-    public String getConditionExpression() { return conditionExpression; }
-
-    public void setConditionExpression(String conditionExpression) {
-        this.conditionExpression = conditionExpression;
+    public Long getId() {
+        return id;
     }
 
-    public Double getWeight() { return weight; }
+    public String getRuleName() {
+        return ruleName;
+    }
 
-    public void setWeight(Double weight) { this.weight = weight; }
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 }
