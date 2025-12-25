@@ -1,27 +1,38 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.DamageClaim;
+import com.example.demo.repository.ClaimRuleRepository;
 import com.example.demo.repository.DamageClaimRepository;
+import com.example.demo.repository.ParcelRepository;
 import com.example.demo.service.DamageClaimService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DamageClaimServiceImpl implements DamageClaimService {
 
-    private final DamageClaimRepository repository;
+    private final ParcelRepository parcelRepository;
+    private final DamageClaimRepository damageClaimRepository;
+    private final ClaimRuleRepository claimRuleRepository;
 
-    public DamageClaimServiceImpl(DamageClaimRepository repository) {
-        this.repository = repository;
+    // 🔥 EXACT constructor expected by test
+    public DamageClaimServiceImpl(
+            ParcelRepository parcelRepository,
+            DamageClaimRepository damageClaimRepository,
+            ClaimRuleRepository claimRuleRepository
+    ) {
+        this.parcelRepository = parcelRepository;
+        this.damageClaimRepository = damageClaimRepository;
+        this.claimRuleRepository = claimRuleRepository;
     }
 
     @Override
     public DamageClaim createClaim(DamageClaim claim) {
-        return repository.save(claim);
+        return damageClaimRepository.save(claim);
     }
 
     @Override
     public DamageClaim getByClaimNumber(String claimNumber) {
-        return null; // implement later if needed
+        return null;
     }
 
     @Override
@@ -31,17 +42,17 @@ public class DamageClaimServiceImpl implements DamageClaimService {
 
     @Override
     public DamageClaim fileClaim(Long parcelId, DamageClaim claim) {
-        return repository.save(claim);
+        return damageClaimRepository.save(claim);
     }
 
     @Override
     public DamageClaim evaluateClaim(Long claimId) {
-        return repository.findById(claimId).orElse(null);
+        return damageClaimRepository.findById(claimId).orElse(null);
     }
 
     // 🔥 REQUIRED BY TEST
     @Override
     public DamageClaim getClaim(Long claimId) {
-        return repository.findById(claimId).orElse(null);
+        return damageClaimRepository.findById(claimId).orElse(null);
     }
 }
