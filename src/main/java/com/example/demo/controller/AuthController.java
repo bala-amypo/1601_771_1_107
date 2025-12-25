@@ -10,7 +10,7 @@ public class AuthController {
 
     private final UserService service;
 
-    public UserController(UserService service) {
+    public AuthController(UserService service) {
         this.service = service;
     }
 
