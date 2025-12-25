@@ -48,8 +48,9 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     // 🔥 REQUIRED BY TEST
-    @Override
-    public List<Evidence> getEvidenceForClaim(Long claimId) {
-        return evidenceRepository.findByClaimId(claimId);
-    }
+   @Override
+public List<Evidence> getEvidenceForClaim(Long claimId) {
+    return evidenceRepository.findByClaim_Id(claimId); // ✅ CORRECT
+}
+
 }
