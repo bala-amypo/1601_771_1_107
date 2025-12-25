@@ -13,4 +13,7 @@ public interface DamageClaimService {
     DamageClaim fileClaim(Long parcelId, DamageClaim claim);
 
     DamageClaim evaluateClaim(Long claimId);
+
+    // 🔥 REQUIRED BY TEST
+    DamageClaim getClaim(Long claimId);
 }
