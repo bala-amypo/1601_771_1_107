@@ -40,6 +40,7 @@ public class AuthController {
             throw new RuntimeException("Invalid credentials");
         }
 
+        // ✅ generate token with correct signature
         String token = jwtUtil.generateToken(
                 user.getId(),
                 user.getEmail(),
