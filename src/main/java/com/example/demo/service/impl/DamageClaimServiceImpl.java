@@ -59,31 +59,27 @@ public class DamageClaimServiceImpl implements DamageClaimService {
         return damageClaimRepository.save(claim);
     }
 
-    @Override
+   @Override
 public DamageClaim evaluateClaim(Long claimId) {
     DamageClaim claim = damageClaimRepository.findById(claimId)
             .orElseThrow(() -> new RuntimeException("Claim not found"));
 
     List<ClaimRule> rules = claimRuleRepository.findAll();
 
-    double totalScore = 0.0;
+    double score = RuleEngineUtil.computeScore(claim.getClaimDescription(), rules);
 
+    // Set applied rules
     if (rules != null && !rules.isEmpty()) {
-        for (ClaimRule rule : rules) {
-            if (rule.getWeight() != null) {
-                totalScore += rule.getWeight();
-                claim.getAppliedRules().add(rule);
-            }
-        }
+        claim.getAppliedRules().addAll(rules);
     }
 
-    // ✅ Decision logic expected by tests
-    if (totalScore > 0) {
+    // ✅ Approval logic
+    if (score > 0) {
         claim.setStatus("APPROVED");
-        claim.setScore(totalScore);
+        claim.setScore(score);
     } else {
         claim.setStatus("REJECTED");
-        claim.setScore(0.0); // 🔥 CRITICAL FIX
+        claim.setScore(0.0);  // ensure REJECTED score is exactly 0.0
     }
 
     return damageClaimRepository.save(claim);
