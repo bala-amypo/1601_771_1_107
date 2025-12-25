@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "parcels",
-    uniqueConstraints = @UniqueConstraint(columnNames = "trackingNumber")
-)
 public class Parcel {
 
     @Id
@@ -17,37 +13,53 @@ public class Parcel {
     private String trackingNumber;
     private String senderName;
     private String receiverName;
-    private Double weightKg;
+    private double weightKg;
 
-    // 🔧 ADD THIS
     private LocalDateTime deliveredAt;
 
     public Parcel() {}
 
-    public Parcel(String trackingNumber, String senderName,
-                  String receiverName, Double weightKg) {
+    public Parcel(String trackingNumber, String senderName, String receiverName, double weightKg) {
         this.trackingNumber = trackingNumber;
         this.senderName = senderName;
         this.receiverName = receiverName;
         this.weightKg = weightKg;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ===== Getters & Setters =====
 
-    public String getTrackingNumber() { return trackingNumber; }
-    public void setTrackingNumber(String trackingNumber) { this.trackingNumber = trackingNumber; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getSenderName() { return senderName; }
-    public void setSenderName(String senderName) { this.senderName = senderName; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getReceiverName() { return receiverName; }
-    public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
 
-    public Double getWeightKg() { return weightKg; }
-    public void setWeightKg(Double weightKg) { this.weightKg = weightKg; }
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
 
-    // 🔧 REQUIRED BY TEST
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public double getWeightKg() {
+        return weightKg;
+    }
+
+    public void setWeightKg(double weightKg) {
+        this.weightKg = weightKg;
+    }
+
     public LocalDateTime getDeliveredAt() {
         return deliveredAt;
     }

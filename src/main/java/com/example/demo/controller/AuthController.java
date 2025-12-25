@@ -1,59 +1,26 @@
 package com.example.demo.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.model.User;
-import com.example.demo.security.JwtUtil;
-import com.example.demo.service.UserService;
-
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/users")
 public class AuthController {
 
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService service;
 
-    public AuthController(UserService userService,
-                          JwtUtil jwtUtil,
-                          PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        return ResponseEntity.ok(userService.register(user));
+    public User register(@RequestBody User user) {
+        return service.register(user);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-
-        User user = userService.findByEmail(request.getEmail());
-
-        // ✅ BCrypt match
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        String token = jwtUtil.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-
-        return ResponseEntity.ok(
-                new AuthResponse(
-                        token,
-                        user.getId(),
-                        user.getEmail(),
-                        user.getRole()
-                )
-        );
+    @GetMapping("/{email}")
+    public User getByEmail(@PathVariable String email) {
+        return service.findByEmail(email);
     }
 }
