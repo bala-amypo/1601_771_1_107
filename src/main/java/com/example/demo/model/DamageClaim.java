@@ -1,7 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class DamageClaim {
@@ -11,67 +12,36 @@ public class DamageClaim {
     private Long id;
 
     private String claimNumber;
-    private String trackingNumber;
-    private String damageType;
-    private String description;
+    private String claimDescription;
+    private String status = "PENDING";
+    private Double score;
 
-    private String status = "OPEN"; // OPEN / APPROVED / REJECTED
+    @ManyToOne
+    private Parcel parcel;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @ManyToMany
+    private Set<ClaimRule> appliedRules = new HashSet<>();
 
     public DamageClaim() {}
 
-    public DamageClaim(String claimNumber, String trackingNumber,
-                       String damageType, String description) {
-        this.claimNumber = claimNumber;
-        this.trackingNumber = trackingNumber;
-        this.damageType = damageType;
-        this.description = description;
-    }
+    // Getters and setters
+    public Long getId() { return id; }
 
-    // ===== Getters & Setters =====
+    public String getClaimNumber() { return claimNumber; }
+    public void setClaimNumber(String claimNumber) { this.claimNumber = claimNumber; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getClaimDescription() { return claimDescription; }  // fix typo
+    public void setClaimDescription(String claimDescription) { this.claimDescription = claimDescription; }
 
-    public String getClaimNumber() {
-        return claimNumber;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setClaimNumber(String claimNumber) {
-        this.claimNumber = claimNumber;
-    }
+    public Double getScore() { return score; }
+    public void setScore(Double score) { this.score = score; }  // fix type to Double
 
-    public String getTrackingNumber() {
-        return trackingNumber;
-    }
+    public Parcel getParcel() { return parcel; }
+    public void setParcel(Parcel parcel) { this.parcel = parcel; }  // fix missing method
 
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
-    }
-
-    public String getDamageType() {
-        return damageType;
-    }
-
-    public void setDamageType(String damageType) {
-        this.damageType = damageType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Set<ClaimRule> getAppliedRules() { return appliedRules; }
+    public void setAppliedRules(Set<ClaimRule> appliedRules) { this.appliedRules = appliedRules; }
 }
