@@ -1,63 +1,50 @@
 package com.example.demo.util;
 
-import java.util.List;
-
 import com.example.demo.model.ClaimRule;
-import com.example.demo.model.DamageClaim;
+
+import java.util.List;
 
 public class RuleEngineUtil {
 
-    private RuleEngineUtil() {}
-
+    /**
+     * Compute a score (0.0 - 1.0) for a description using a list of rules.
+     * 
+     * @param description the claim description (can be null)
+     * @param rules list of ClaimRule
+     * @return normalized score
+     */
     public static double computeScore(String description, List<ClaimRule> rules) {
-        DamageClaim claim = new DamageClaim();
-        claim.setClaimDescription(description);
-        return evaluate(claim, rules);
-    }
-
-    // existing logic (unchanged)
-    public static double evaluate(DamageClaim claim, List<ClaimRule> rules) {
-
-        if (rules == null || rules.isEmpty()) {
+        if (description == null || rules == null || rules.isEmpty()) {
             return 0.0;
         }
 
-        double totalWeight = 0.0;
+        double totalWeight = rules.stream()
+                                  .mapToDouble(r -> r.getWeight() != null ? r.getWeight() : 0.0)
+                                  .sum();
+
+        if (totalWeight <= 0) return 0.0;
+
         double matchedWeight = 0.0;
 
-        String description = claim.getClaimDescription();
-        if (description == null) {
-            description = "";
-        }
-
-        description = description.toLowerCase();
-
         for (ClaimRule rule : rules) {
+            String expr = rule.getExpression();
+            double weight = rule.getWeight() != null ? rule.getWeight() : 0.0;
 
-            double weight = rule.getWeight() == null ? 0.0 : rule.getWeight();
-            totalWeight += weight;
-
-            String condition = rule.getConditionExpression();
-            if (condition == null) continue;
-
-            if ("always".equalsIgnoreCase(condition)) {
-                matchedWeight += weight;
-                continue;
-            }
-
-            if (condition.toLowerCase().startsWith("description_contains:")) {
-                String keyword = condition.substring(
-                        "description_contains:".length()
-                ).toLowerCase();
-
-                if (!keyword.isEmpty() && description.contains(keyword)) {
+            try {
+                if ("always".equalsIgnoreCase(expr)) {
                     matchedWeight += weight;
+                } else if (expr.startsWith("description_contains:")) {
+                    String keyword = expr.split(":", 2)[1].toLowerCase();
+                    if (description.toLowerCase().contains(keyword)) {
+                        matchedWeight += weight;
+                    }
                 }
+            } catch (Exception e) {
+                // invalid expression, ignore and continue
             }
         }
 
-        if (totalWeight == 0.0) return 0.0;
-
-        return Math.max(0.0, Math.min(1.0, matchedWeight / totalWeight));
+        // normalize between 0 and 1
+        return Math.min(1.0, matchedWeight / totalWeight);
     }
 }

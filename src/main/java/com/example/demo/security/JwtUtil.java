@@ -1,57 +1,44 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private final String SECRET = "mysecretkey12345"; // change to env var in prod
+    private final long EXPIRATION = 1000 * 60 * 60;   // 1 hour
 
-    @Value("${jwt.expiration}")
-    private long expiration;
-
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
-    }
-
-    // ✅ USED BY AuthController
-    public String generateToken(Long userId, String username, String role) {
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("userId", userId)
+                .claim("id", userId)
+                .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    // ✅ USED BY JwtAuthenticationFilter
+    public String extractEmail(String token) {
+        return extractAllClaims(token).get("email", String.class);
+    }
+
     public boolean validateToken(String token) {
         try {
-            extractClaims(token);
+            extractAllClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
-    }
-
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
     }
 }
