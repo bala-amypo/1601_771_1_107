@@ -2,16 +2,7 @@ package com.example.demo.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "evidence")
@@ -21,27 +12,23 @@ public class Evidence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "claim_id", nullable = false)
-    private DamageClaim claim;
+    private String evidenceType;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String evidenceType; // IMAGE / DOCUMENT / TEXT
-
-    @NotBlank
-    @Column(nullable = false)
     private String fileUrl;
 
-    @Column(nullable = false, updatable = false)
     private LocalDateTime uploadedAt;
 
-    @PrePersist
-    protected void onUpload() {
-        this.uploadedAt = LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn(name = "claim_id")
+    private DamageClaim claim;
+
+    public Evidence() {
     }
 
-    // Getters and setters
+    @PrePersist
+    public void onUpload() {
+        this.uploadedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -49,14 +36,6 @@ public class Evidence {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public DamageClaim getClaim() {
-        return claim;
-    }
-
-    public void setClaim(DamageClaim claim) {
-        this.claim = claim;
     }
 
     public String getEvidenceType() {
@@ -77,5 +56,13 @@ public class Evidence {
 
     public LocalDateTime getUploadedAt() {
         return uploadedAt;
+    }
+
+    public DamageClaim getClaim() {
+        return claim;
+    }
+
+    public void setClaim(DamageClaim claim) {
+        this.claim = claim;
     }
 }

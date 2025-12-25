@@ -2,14 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.Evidence;
 import com.example.demo.service.EvidenceService;
@@ -18,18 +12,28 @@ import com.example.demo.service.EvidenceService;
 @RequestMapping("/evidence")
 public class EvidenceController {
 
-    @Autowired
-    private EvidenceService evidenceService;
+    private final EvidenceService evidenceService;
+
+    public EvidenceController(EvidenceService evidenceService) {
+        this.evidenceService = evidenceService;
+    }
+
     @PostMapping("/upload/{claimId}")
     public ResponseEntity<Evidence> uploadEvidence(
             @PathVariable Long claimId,
             @RequestBody Evidence evidence) {
-        Evidence savedEvidence = evidenceService.uploadEvidence(claimId, evidence);
-        return ResponseEntity.ok(savedEvidence);
+
+        return ResponseEntity.ok(
+                evidenceService.uploadEvidence(claimId, evidence)
+        );
     }
+
     @GetMapping("/claim/{claimId}")
-    public ResponseEntity<List<Evidence>> getEvidenceForClaim(@PathVariable Long claimId) {
-        List<Evidence> evidenceList = evidenceService.getEvidenceForClaim(claimId);
-        return ResponseEntity.ok(evidenceList);
+    public ResponseEntity<List<Evidence>> getEvidence(
+            @PathVariable Long claimId) {
+
+        return ResponseEntity.ok(
+                evidenceService.getEvidenceForClaim(claimId)
+        );
     }
 }
