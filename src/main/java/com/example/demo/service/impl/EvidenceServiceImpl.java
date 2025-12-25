@@ -1,38 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DamageClaim;
 import com.example.demo.model.Evidence;
-import com.example.demo.repository.DamageClaimRepository;
 import com.example.demo.repository.EvidenceRepository;
 import com.example.demo.service.EvidenceService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class EvidenceServiceImpl implements EvidenceService {
 
-    private final EvidenceRepository evidenceRepo;
-    private final DamageClaimRepository claimRepo;
+    private final EvidenceRepository repository;
 
-    public EvidenceServiceImpl(EvidenceRepository evidenceRepo,
-                               DamageClaimRepository claimRepo) {
-        this.evidenceRepo = evidenceRepo;
-        this.claimRepo = claimRepo;
+    public EvidenceServiceImpl(EvidenceRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Evidence uploadEvidence(Long claimId, Evidence evidence) {
-
-        DamageClaim claim = claimRepo.findById(claimId)
-                .orElseThrow(() -> new RuntimeException("Claim not found"));
-
-        evidence.setClaim(claim);
-        return evidenceRepo.save(evidence);
+    public Evidence createEvidence(Evidence evidence) {
+        return repository.save(evidence);
     }
 
     @Override
-    public List<Evidence> getEvidenceForClaim(Long claimId) {
-        return evidenceRepo.findByClaim_Id(claimId);
+    public Evidence getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Evidence> getAllEvidence() {
+        return repository.findAll();
     }
 }
