@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
-import java.util.Optional;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.BadRequestException;
@@ -10,14 +9,16 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
-@Service   // ✅ REQUIRED so Spring can find this bean
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    // ✅ Constructor injection (Spring will inject repository)
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -31,18 +32,15 @@ public class UserServiceImpl implements UserService {
             user.setRole("AGENT");
         }
 
-        // ❌ No PasswordEncoder (not configured in your project)
+        // ✅ BCrypt encoding
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-
-        if (userOpt.isEmpty()) {
-            throw new ResourceNotFoundException("User not found");
-        }
-
-        return userOpt.get();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
