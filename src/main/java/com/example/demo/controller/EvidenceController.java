@@ -1,39 +1,33 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.Evidence;
 import com.example.demo.service.EvidenceService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/evidence")
 public class EvidenceController {
 
-    private final EvidenceService evidenceService;
+    private final EvidenceService service;
 
-    public EvidenceController(EvidenceService evidenceService) {
-        this.evidenceService = evidenceService;
+    public EvidenceController(EvidenceService service) {
+        this.service = service;
     }
 
-    @PostMapping("/upload/{claimId}")
-    public ResponseEntity<Evidence> uploadEvidence(
-            @PathVariable Long claimId,
-            @RequestBody Evidence evidence) {
-
-        return ResponseEntity.ok(
-                evidenceService.uploadEvidence(claimId, evidence)
-        );
+    @PostMapping("/create")
+    public Evidence createEvidence(@RequestBody Evidence evidence) {
+        return service.createEvidence(evidence);
     }
 
-    @GetMapping("/claim/{claimId}")
-    public ResponseEntity<List<Evidence>> getEvidence(
-            @PathVariable Long claimId) {
+    @GetMapping("/{id}")
+    public Evidence getEvidence(@PathVariable Long id) {
+        return service.getById(id);
+    }
 
-        return ResponseEntity.ok(
-                evidenceService.getEvidenceForClaim(claimId)
-        );
+    @GetMapping("/all")
+    public List<Evidence> getAllEvidence() {
+        return service.getAllEvidence();
     }
 }
