@@ -25,16 +25,29 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // allow register & login
+                // Allow authentication endpoints
+                .requestMatchers("/auth/**").permitAll()
+
+                // Allow GET requests to parcels (optional)
                 .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
+
+                // ✅ Swagger UI and API docs
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/index.html"
+                ).permitAll()
+
+                // All other requests require authentication
                 .anyRequest().authenticated()
             )
+            // Add your JWT filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // Required for authenticationManager injection if needed elsewhere
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
