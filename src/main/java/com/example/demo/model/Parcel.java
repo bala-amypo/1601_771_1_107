@@ -1,37 +1,36 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "parcels", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "trackingNumber")
-})
+@Table(
+    name = "parcels",
+    uniqueConstraints = @UniqueConstraint(columnNames = "trackingNumber")
+)
 public class Parcel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(nullable = false, unique = true)
     private String trackingNumber;
 
-    @NotBlank
-    @Column(nullable = false)
     private String senderName;
 
-    @NotBlank
-    @Column(nullable = false)
     private String receiverName;
 
-    @NotNull
-    @Positive
-    @Column(nullable = false)
     private Double weightKg;
 
-    private LocalDateTime deliveredAt;
+    public Parcel() {
+    }
+
+    public Parcel(String trackingNumber, String senderName,
+                  String receiverName, Double weightKg) {
+        this.trackingNumber = trackingNumber;
+        this.senderName = senderName;
+        this.receiverName = receiverName;
+        this.weightKg = weightKg;
+    }
 
     public Long getId() {
         return id;
@@ -71,13 +70,5 @@ public class Parcel {
 
     public void setWeightKg(Double weightKg) {
         this.weightKg = weightKg;
-    }
-
-    public LocalDateTime getDeliveredAt() {
-        return deliveredAt;
-    }
-
-    public void setDeliveredAt(LocalDateTime deliveredAt) {
-        this.deliveredAt = deliveredAt;
     }
 }
