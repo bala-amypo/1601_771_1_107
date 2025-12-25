@@ -4,9 +4,9 @@ import com.example.demo.model.DamageClaim;
 
 public interface DamageClaimService {
 
-    DamageClaim fileClaim(Long parcelId, DamageClaim claim);
+    DamageClaim createClaim(DamageClaim claim);
 
-    DamageClaim evaluateClaim(Long claimId);
+    DamageClaim getByClaimNumber(String claimNumber);
 
-    DamageClaim getClaim(Long claimId);
+    DamageClaim updateStatus(String claimNumber, String status);
 }

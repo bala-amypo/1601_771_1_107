@@ -1,46 +1,32 @@
 package com.example.demo.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.DamageClaim;
 import com.example.demo.service.DamageClaimService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/claims")
+@RequestMapping("/damage-claims")
 public class DamageClaimController {
 
-    private final DamageClaimService claimService;
+    private final DamageClaimService service;
 
-    public DamageClaimController(DamageClaimService claimService) {
-        this.claimService = claimService;
+    public DamageClaimController(DamageClaimService service) {
+        this.service = service;
     }
 
-    @PostMapping("/file/{parcelId}")
-    public ResponseEntity<DamageClaim> fileClaim(
-            @PathVariable Long parcelId,
-            @RequestBody DamageClaim claim) {
-
-        return ResponseEntity.ok(
-                claimService.fileClaim(parcelId, claim)
-        );
+    @PostMapping
+    public DamageClaim create(@RequestBody DamageClaim claim) {
+        return service.createClaim(claim);
     }
 
-    @PutMapping("/evaluate/{claimId}")
-    public ResponseEntity<DamageClaim> evaluateClaim(
-            @PathVariable Long claimId) {
-
-        return ResponseEntity.ok(
-                claimService.evaluateClaim(claimId)
-        );
+    @GetMapping("/{claimNumber}")
+    public DamageClaim get(@PathVariable String claimNumber) {
+        return service.getByClaimNumber(claimNumber);
     }
 
-    @GetMapping("/{claimId}")
-    public ResponseEntity<DamageClaim> getClaim(
-            @PathVariable Long claimId) {
-
-        return ResponseEntity.ok(
-                claimService.getClaim(claimId)
-        );
+    @PutMapping("/{claimNumber}/status/{status}")
+    public DamageClaim updateStatus(@PathVariable String claimNumber,
+                                    @PathVariable String status) {
+        return service.updateStatus(claimNumber, status);
     }
 }

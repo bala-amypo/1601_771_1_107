@@ -1,32 +1,26 @@
 package com.example.demo.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.Parcel;
 import com.example.demo.service.ParcelService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/parcels")
 public class ParcelController {
 
-    private final ParcelService parcelService;
+    private final ParcelService service;
 
-    public ParcelController(ParcelService parcelService) {
-        this.parcelService = parcelService;
+    public ParcelController(ParcelService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<Parcel> addParcel(@RequestBody Parcel parcel) {
-        return ResponseEntity.ok(parcelService.addParcel(parcel));
+    public Parcel addParcel(@RequestBody Parcel parcel) {
+        return service.addParcel(parcel);
     }
 
-    @GetMapping("/tracking/{trackingNumber}")
-    public ResponseEntity<Parcel> getParcel(
-            @PathVariable String trackingNumber) {
-
-        return ResponseEntity.ok(
-                parcelService.getByTrackingNumber(trackingNumber)
-        );
+    @GetMapping("/{trackingNumber}")
+    public Parcel getParcel(@PathVariable String trackingNumber) {
+        return service.getByTrackingNumber(trackingNumber);
     }
 }

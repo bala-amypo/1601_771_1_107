@@ -1,82 +1,66 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "damage_claims")
 public class DamageClaim {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String claimDescription;
+    private String claimNumber;
+    private String trackingNumber;
+    private String damageType;
+    private String description;
 
-    private LocalDateTime filedAt;
+    private String status = "OPEN"; // OPEN / APPROVED / REJECTED
 
-    private String status;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private Double score;
+    public DamageClaim() {}
 
-    @ManyToOne
-    @JoinColumn(name = "parcel_id")
-    private Parcel parcel;
-
-    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Evidence> evidenceList = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "claim_applied_rules",
-        joinColumns = @JoinColumn(name = "claim_id"),
-        inverseJoinColumns = @JoinColumn(name = "rule_id")
-    )
-    private Set<ClaimRule> appliedRules = new HashSet<>();
-
-    // -------------------- Constructors --------------------
-
-    public DamageClaim() {
-        this.status = "PENDING";
+    public DamageClaim(String claimNumber, String trackingNumber,
+                       String damageType, String description) {
+        this.claimNumber = claimNumber;
+        this.trackingNumber = trackingNumber;
+        this.damageType = damageType;
+        this.description = description;
     }
 
-    // -------------------- Lifecycle --------------------
-
-    @PrePersist
-    public void onCreate() {
-        if (this.filedAt == null) {
-            this.filedAt = LocalDateTime.now();
-        }
-    }
-
-    // -------------------- Getters & Setters --------------------
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
     }
 
-    // ✅ REQUIRED BY TESTS
-    public void setId(Long id) {
-        this.id = id;
+    public String getClaimNumber() {
+        return claimNumber;
     }
 
-    public String getClaimDescription() {
-        return claimDescription;
+    public void setClaimNumber(String claimNumber) {
+        this.claimNumber = claimNumber;
     }
 
-    public void setClaimDescription(String claimDescription) {
-        this.claimDescription = claimDescription;
+    public String getTrackingNumber() {
+        return trackingNumber;
     }
 
-    public LocalDateTime getFiledAt() {
-        return filedAt;
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 
-    public void setFiledAt(LocalDateTime filedAt) {
-        this.filedAt = filedAt;
+    public String getDamageType() {
+        return damageType;
+    }
+
+    public void setDamageType(String damageType) {
+        this.damageType = damageType;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getStatus() {
@@ -87,35 +71,7 @@ public class DamageClaim {
         this.status = status;
     }
 
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
-    public Parcel getParcel() {
-        return parcel;
-    }
-
-    public void setParcel(Parcel parcel) {
-        this.parcel = parcel;
-    }
-
-    public Set<Evidence> getEvidenceList() {
-        return evidenceList;
-    }
-
-    public void setEvidenceList(Set<Evidence> evidenceList) {
-        this.evidenceList = evidenceList;
-    }
-
-    public Set<ClaimRule> getAppliedRules() {
-        return appliedRules;
-    }
-
-    public void setAppliedRules(Set<ClaimRule> appliedRules) {
-        this.appliedRules = appliedRules;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
