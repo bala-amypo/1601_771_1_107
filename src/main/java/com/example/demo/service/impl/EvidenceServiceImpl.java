@@ -7,7 +7,9 @@ import com.example.demo.repository.EvidenceRepository;
 import com.example.demo.service.EvidenceService;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EvidenceServiceImpl implements EvidenceService {
 
     private final EvidenceRepository evidenceRepo;

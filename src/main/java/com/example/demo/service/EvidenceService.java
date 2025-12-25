@@ -1,11 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Evidence;
-import java.util.List;
+import com.example.demo.model.User;
 
-public interface EvidenceService {
-
-    Evidence uploadEvidence(Long claimId, Evidence evidence);
-
-    List<Evidence> getEvidenceForClaim(Long claimId);
+public interface UserService {
+    User register(User user);
+    User findByEmail(String email);
 }
