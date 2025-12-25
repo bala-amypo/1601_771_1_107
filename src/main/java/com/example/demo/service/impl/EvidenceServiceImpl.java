@@ -39,14 +39,14 @@ public Evidence getById(Long id) {
     }
 
     // 🔥 REQUIRED BY TEST
-    @Override
-    public Evidence uploadEvidence(Long claimId, Evidence evidence) {
-        DamageClaim claim = damageClaimRepository.findById(claimId)
-                .orElseThrow(() -> new RuntimeException("Claim not found"));
+   @Override
+public Evidence uploadEvidence(Long claimId, Evidence evidence) {
+    DamageClaim claim = damageClaimRepository.findById(claimId)
+            .orElseThrow(() -> new RuntimeException("DamageClaim not found"));
 
-        evidence.setClaim(claim);
-        return evidenceRepository.save(evidence);
-    }
+    evidence.setClaim(claim);
+    return evidenceRepository.save(evidence);
+}
 
     // 🔥 REQUIRED BY TEST
    @Override
