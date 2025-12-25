@@ -9,7 +9,6 @@ public class RuleEngineUtil {
 
     private RuleEngineUtil() {}
 
-    // ✅ METHOD EXPECTED BY TESTS
     public static double computeScore(String description, List<ClaimRule> rules) {
         DamageClaim claim = new DamageClaim();
         claim.setClaimDescription(description);
