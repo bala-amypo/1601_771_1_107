@@ -7,10 +7,16 @@ import com.example.demo.model.DamageClaim;
 
 public class RuleEngineUtil {
 
-    private RuleEngineUtil() {
-        // utility class
+    private RuleEngineUtil() {}
+
+    // ✅ METHOD EXPECTED BY TESTS
+    public static double computeScore(String description, List<ClaimRule> rules) {
+        DamageClaim claim = new DamageClaim();
+        claim.setClaimDescription(description);
+        return evaluate(claim, rules);
     }
 
+    // existing logic (unchanged)
     public static double evaluate(DamageClaim claim, List<ClaimRule> rules) {
 
         if (rules == null || rules.isEmpty()) {
@@ -33,20 +39,14 @@ public class RuleEngineUtil {
             totalWeight += weight;
 
             String condition = rule.getConditionExpression();
+            if (condition == null) continue;
 
-            if (condition == null) {
-                continue;
-            }
-
-            // Rule: always
             if ("always".equalsIgnoreCase(condition)) {
                 matchedWeight += weight;
                 continue;
             }
 
-            // Rule: description_contains:KEYWORD
             if (condition.toLowerCase().startsWith("description_contains:")) {
-
                 String keyword = condition.substring(
                         "description_contains:".length()
                 ).toLowerCase();
@@ -57,13 +57,8 @@ public class RuleEngineUtil {
             }
         }
 
-        if (totalWeight == 0.0) {
-            return 0.0;
-        }
+        if (totalWeight == 0.0) return 0.0;
 
-        double score = matchedWeight / totalWeight;
-
-        // clamp to 0.0 - 1.0
-        return Math.max(0.0, Math.min(1.0, score));
+        return Math.max(0.0, Math.min(1.0, matchedWeight / totalWeight));
     }
 }

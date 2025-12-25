@@ -26,7 +26,7 @@ public class DamageClaim {
     @JoinColumn(name = "parcel_id")
     private Parcel parcel;
 
-    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Evidence> evidenceList = new HashSet<>();
 
     @ManyToMany
@@ -37,40 +37,83 @@ public class DamageClaim {
     )
     private Set<ClaimRule> appliedRules = new HashSet<>();
 
+    // -------------------- Constructors --------------------
+
     public DamageClaim() {
         this.status = "PENDING";
     }
 
+    // -------------------- Lifecycle --------------------
+
     @PrePersist
     public void onCreate() {
-        this.filedAt = LocalDateTime.now();
+        if (this.filedAt == null) {
+            this.filedAt = LocalDateTime.now();
+        }
     }
 
-    // getters and setters
+    // -------------------- Getters & Setters --------------------
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getClaimDescription() { return claimDescription; }
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getClaimDescription() {
+        return claimDescription;
+    }
 
     public void setClaimDescription(String claimDescription) {
         this.claimDescription = claimDescription;
     }
 
-    public LocalDateTime getFiledAt() { return filedAt; }
+    public LocalDateTime getFiledAt() {
+        return filedAt;
+    }
 
-    public String getStatus() { return status; }
+    public void setFiledAt(LocalDateTime filedAt) {
+        this.filedAt = filedAt;
+    }
 
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public Double getScore() { return score; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public void setScore(Double score) { this.score = score; }
+    public Double getScore() {
+        return score;
+    }
 
-    public Parcel getParcel() { return parcel; }
+    public void setScore(Double score) {
+        this.score = score;
+    }
 
-    public void setParcel(Parcel parcel) { this.parcel = parcel; }
+    public Parcel getParcel() {
+        return parcel;
+    }
 
-    public Set<ClaimRule> getAppliedRules() { return appliedRules; }
+    public void setParcel(Parcel parcel) {
+        this.parcel = parcel;
+    }
+
+    public Set<Evidence> getEvidenceList() {
+        return evidenceList;
+    }
+
+    public void setEvidenceList(Set<Evidence> evidenceList) {
+        this.evidenceList = evidenceList;
+    }
+
+    public Set<ClaimRule> getAppliedRules() {
+        return appliedRules;
+    }
 
     public void setAppliedRules(Set<ClaimRule> appliedRules) {
         this.appliedRules = appliedRules;
