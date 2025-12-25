@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
@@ -38,7 +38,10 @@ public class SecurityConfig {
                         "/v3/api-docs/**"
                 ).permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            // optional but recommended
+            .httpBasic(basic -> basic.disable())
+            .formLogin(form -> form.disable());
 
         http.addFilterBefore(
                 jwtAuthenticationFilter,
@@ -48,11 +51,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // ✅ BCrypt encoder (THIS is what enables bcrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Optional – used only if you later add AuthenticationManager-based login
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {
