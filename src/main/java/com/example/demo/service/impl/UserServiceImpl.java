@@ -2,21 +2,20 @@ package com.example.demo.service.impl;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
-/**
- * Plain Java implementation (NO Spring annotations)
- * This matches your current project setup and test expectations.
- */
+@Service   // ✅ REQUIRED so Spring can find this bean
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    // ✅ Constructor expected by tests
+    // ✅ Constructor injection (Spring will inject repository)
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -32,8 +31,7 @@ public class UserServiceImpl implements UserService {
             user.setRole("AGENT");
         }
 
-        // ❌ No PasswordEncoder (not available in your project)
-        // Store password as-is for now (tests do not check encryption)
+        // ❌ No PasswordEncoder (not configured in your project)
         return userRepository.save(user);
     }
 
