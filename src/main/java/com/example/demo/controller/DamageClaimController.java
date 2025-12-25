@@ -5,7 +5,7 @@ import com.example.demo.service.DamageClaimService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/damage-claims")
+@RequestMapping("/claims")
 public class DamageClaimController {
 
     private final DamageClaimService service;
@@ -15,18 +15,18 @@ public class DamageClaimController {
     }
 
     @PostMapping
-    public DamageClaim create(@RequestBody DamageClaim claim) {
+    public DamageClaim createClaim(@RequestBody DamageClaim claim) {
         return service.createClaim(claim);
     }
 
     @GetMapping("/{claimNumber}")
-    public DamageClaim get(@PathVariable String claimNumber) {
+    public DamageClaim getByClaimNumber(@PathVariable String claimNumber) {
         return service.getByClaimNumber(claimNumber);
     }
 
-    @PutMapping("/{claimNumber}/status/{status}")
+    @PutMapping("/{claimNumber}/status")
     public DamageClaim updateStatus(@PathVariable String claimNumber,
-                                    @PathVariable String status) {
+                                    @RequestParam String status) {
         return service.updateStatus(claimNumber, status);
     }
 }
