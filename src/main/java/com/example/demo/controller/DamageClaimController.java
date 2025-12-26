@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.model.DamageClaim;
 import com.example.demo.service.DamageClaimService;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping("/claims")
+@SecurityRequirement(name="bearerAuth")
+
 public class DamageClaimController {
 
     private final DamageClaimService service;

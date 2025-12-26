@@ -3,9 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.model.Parcel;
 import com.example.demo.service.ParcelService;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping("/parcels")
+@SecurityRequirement(name="bearerAuth")
+
 public class ParcelController {
 
     private final ParcelService service;

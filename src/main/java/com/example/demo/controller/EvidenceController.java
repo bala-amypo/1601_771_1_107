@@ -3,11 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.model.Evidence;
 import com.example.demo.service.EvidenceService;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
 
 @RestController
 @RequestMapping("/evidence")
+@SecurityRequirement(name="bearerAuth")
+
 public class EvidenceController {
 
     private final EvidenceService service;
