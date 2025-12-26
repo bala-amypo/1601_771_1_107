@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/users")
 public class AuthController {
