@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/users")
 public class AuthController {
 
@@ -22,7 +23,6 @@ public class AuthController {
     }
 
     @GetMapping("/{email}")
-    @SecurityRequirement(name = "bearerAuth")
     public User getByEmail(@PathVariable String email) {
         return service.findByEmail(email);
     }

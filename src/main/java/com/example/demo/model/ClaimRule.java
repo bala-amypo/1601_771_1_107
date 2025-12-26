@@ -20,9 +20,6 @@ public class ClaimRule {
         this.expression = expression;
         this.weight = weight;
     }
-
-    // ===== Getters & Setters =====
-
     public Long getId() {
         return id;
     }

@@ -26,10 +26,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Allow authentication endpoints
                 .requestMatchers("/auth/**").permitAll()
-
-                // Allow GET requests to parcels (optional)
                 .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
                 .requestMatchers(
                     "/v3/api-docs/**",
