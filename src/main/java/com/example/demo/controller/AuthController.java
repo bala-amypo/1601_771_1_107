@@ -5,7 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-@SecurityRequirement(name = "bearerAuth")
+
 @RestController
 @RequestMapping("/users")
 public class AuthController {
@@ -22,6 +22,7 @@ public class AuthController {
     }
 
     @GetMapping("/{email}")
+    @SecurityRequirement(name = "bearerAuth")
     public User getByEmail(@PathVariable String email) {
         return service.findByEmail(email);
     }
