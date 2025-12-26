@@ -84,7 +84,7 @@ public class AuthController {
                 user.getRole()
         );
     }
-
+    @SecurityRequirement(name="bearerAuth")
     @GetMapping("/{email}")
     public User getByEmail(@PathVariable String email) {
         return service.findByEmail(email);
