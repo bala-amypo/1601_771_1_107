@@ -22,7 +22,7 @@ public class AuthController {
         return service.register(user);
     }
     
-    @PostMapping("/")
+    @PostMapping("/login")
     @GetMapping("/{email}")
     public User getByEmail(@PathVariable String email) {
         return service.findByEmail(email);
