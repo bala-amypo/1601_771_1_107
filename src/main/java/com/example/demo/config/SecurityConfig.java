@@ -31,19 +31,14 @@ public class SecurityConfig {
 
                 // Allow GET requests to parcels (optional)
                 .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
-
-                // ✅ Swagger UI and API docs
                 .requestMatchers(
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/swagger-ui/index.html"
                 ).permitAll()
-
-                // All other requests require authentication
                 .anyRequest().authenticated()
             )
-            // Add your JWT filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
