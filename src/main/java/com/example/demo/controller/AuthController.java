@@ -39,7 +39,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/users")
 public class AuthController {
 
