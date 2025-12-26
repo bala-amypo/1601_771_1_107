@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.*;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -22,30 +25,49 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors().and()
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Allow authentication endpoints
+                // Public endpoints (match your controllers)
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/api/**").permitAll()
 
-                // Allow GET requests to parcels (optional)
+                // Optional public GETs
                 .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
 
-                // ✅ Swagger UI and API docs
+                // Swagger/OpenAPI
                 .requestMatchers(
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/swagger-ui/index.html"
+                    "/swagger-ui.html"
                 ).permitAll()
 
-                // All other requests require authentication
+                // Everything else requires authentication
                 .anyRequest().authenticated()
             )
-            // Add your JWT filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // Global CORS configuration
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Adjust origins to match your environment (add frontend/Swagger origins)
+        configuration.setAllowedOrigins(List.of(
+            "http://localhost:8080",
+            "http://localhost:3000"
+        ));
+        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
