@@ -10,6 +10,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rules")
+@SecurityRequirement(name="bearerAuth")
+
 public class ClaimRuleController {
 
     private final ClaimRuleService ruleService;
