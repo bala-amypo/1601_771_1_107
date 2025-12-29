@@ -201,33 +201,39 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // 🔓 Allow preflight
+                // 🔓 Allow CORS preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // 🔓 PUBLIC AUTH APIs (FIX 🔥)
+                // 🔓 Public auth endpoints
                 .requestMatchers("/users/register", "/users/login").permitAll()
 
-                // 🔓 Swagger
+                // 🔓 Swagger endpoints
                 .requestMatchers(
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
                 ).permitAll()
 
-                // 🔒 Everything else needs JWT
+                // 🔒 RULE MANAGEMENT → AGENT only
+                .requestMatchers("/rules/**").hasRole("AGENT")
+
+                // 🔒 Everything else requires authentication
                 .anyRequest().authenticated()
             )
 
+            // 🔐 JWT filter
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    // 🔐 Password encoder bean (FIXED your earlier error)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // 🔐 Authentication manager
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
