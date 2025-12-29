@@ -31,15 +31,21 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
 
+                // 🔓 Auth endpoints
                 .requestMatchers("/users/register", "/users/login").permitAll()
+
+                // 🔓 Swagger / OpenAPI
                 .requestMatchers(
-                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
                         "/swagger-ui/**",
-                        "/swagger-ui.html"
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml"
                 ).permitAll()
 
+                // 🔓 Public GET
                 .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
 
+                // 🔒 Everything else
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -47,13 +53,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ REQUIRED FOR LOGIN
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // optional (not used directly, but safe to keep)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
