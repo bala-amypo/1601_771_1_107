@@ -193,7 +193,7 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> {})   // allow browser/Swagger calls
+            .cors(cors -> {})
 
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -204,8 +204,8 @@ public class SecurityConfig {
                 // 🔓 Allow preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // 🔓 Auth APIs
-                .requestMatchers("/api/auth/**").permitAll()
+                // 🔓 PUBLIC AUTH APIs (FIX 🔥)
+                .requestMatchers("/users/register", "/users/login").permitAll()
 
                 // 🔓 Swagger
                 .requestMatchers(
@@ -214,7 +214,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**"
                 ).permitAll()
 
-                // 🔒 Everything else
+                // 🔒 Everything else needs JWT
                 .anyRequest().authenticated()
             )
 
