@@ -31,19 +31,19 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
 
-                // 🔓 Auth endpoints
+                // 🔓 Auth APIs
                 .requestMatchers("/users/register", "/users/login").permitAll()
 
-                // 🔓 Swagger / OpenAPI
+                // 🔓 Swagger
                 .requestMatchers(
                         "/swagger-ui.html",
                         "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/v3/api-docs.yaml"
+                        "/v3/api-docs/**"
                 ).permitAll()
 
-                // 🔓 Public GET
-                .requestMatchers(HttpMethod.GET, "/parcel/**").permitAll()
+                // 🔓 PARCEL APIs (FIX)
+                .requestMatchers(HttpMethod.GET, "/parcels/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/parcels/**").permitAll()
 
                 // 🔒 Everything else
                 .anyRequest().authenticated()
