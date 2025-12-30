@@ -24,13 +24,12 @@ public class DamageClaim {
 
     public DamageClaim() {}
 
-    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
     }
 
-    // 🔥 REQUIRED BY TEST
+
     public void setId(Long id) {
         this.id = id;
     }

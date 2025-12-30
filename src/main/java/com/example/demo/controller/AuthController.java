@@ -27,12 +27,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
-        // encode password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return service.register(user);
     }
 
-    // ✅ LOGIN ENDPOINT
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
 

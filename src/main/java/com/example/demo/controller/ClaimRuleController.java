@@ -20,18 +20,13 @@ public class ClaimRuleController {
         this.ruleService = ruleService;
     }
 
-    // ===============================
-    // ADD NEW CLAIM RULE
-    // ===============================
+
     @PostMapping
     public ResponseEntity<ClaimRule> addRule(@RequestBody ClaimRule rule) {
         ClaimRule saved = ruleService.addRule(rule);
         return ResponseEntity.ok(saved);
     }
 
-    // ===============================
-    // GET ALL CLAIM RULES
-    // ===============================
     @GetMapping
     public ResponseEntity<List<ClaimRule>> getAllRules() {
         return ResponseEntity.ok(ruleService.getAllRules());

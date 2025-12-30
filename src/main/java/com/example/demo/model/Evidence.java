@@ -20,7 +20,7 @@ public class Evidence {
 
     public Evidence() {}
 
-    // ===== Getters & Setters =====
+
 
     public Long getId() {
         return id;
