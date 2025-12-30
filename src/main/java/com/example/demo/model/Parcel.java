@@ -26,7 +26,7 @@ public class Parcel {
         this.weightKg = weightKg;
     }
 
-    // ===== Getters & Setters =====
+
 
     public Long getId() {
         return id;

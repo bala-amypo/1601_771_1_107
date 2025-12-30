@@ -10,6 +10,6 @@ public interface DamageClaimRepository extends JpaRepository<DamageClaim, Long> 
 
     Optional<DamageClaim> findByClaimNumber(String claimNumber);
 
-    // 🔥 REQUIRED BY MasterTestNGSuiteTest
+
     List<DamageClaim> findByParcel_Id(Long parcelId);
 }

@@ -14,6 +14,6 @@ public interface DamageClaimService {
 
     DamageClaim evaluateClaim(Long claimId);
 
-    // 🔥 REQUIRED BY TEST
+
     DamageClaim getClaim(Long claimId);
 }
